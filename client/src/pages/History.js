@@ -227,20 +227,27 @@ const History = () => {
     });
   };
   
-  // Formatte le jour de la semaine et la date ensemble sur une ligne
+  // Formatte le jour de la semaine et la date ensemble sur une ligne avec l'heure et les minutes
   const formatFullDate = (date) => {
     // Vérifier que la date est valide
     if (!date || isNaN(new Date(date).getTime())) {
       return 'Date invalide';
     }
     
-    const weekday = new Date(date).toLocaleDateString('fr-FR', { weekday: 'long' });
-    const monthYear = new Date(date).toLocaleDateString('fr-FR', {
+    const dateObj = new Date(date);
+    const weekday = dateObj.toLocaleDateString('fr-FR', { weekday: 'long' });
+    const monthYear = dateObj.toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
-    return `${weekday} ${monthYear}`;
+    
+    // Formatage de l'heure au format 24h avec padding des zéros si nécessaire
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    const timeStr = `${hours}:${minutes}`;
+    
+    return `${weekday} ${monthYear} ${timeStr}`;
   };
   
   // Calcule la date de complétion (18 jours pour poulet, 25 pour canard)
