@@ -69,6 +69,7 @@ router.post('/trays', async (req, res) => {
       position: req.body.position,
       addedDate: req.body.addedDate,
       notes: req.body.notes,
+      eggType: req.body.eggType || 'chicken',
       notificationSent: false,
       removed: false
     });

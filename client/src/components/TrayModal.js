@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { FaTimes, FaCalendarAlt, FaCheck, FaTrash, FaClock } from 'react-icons/fa';
 import { GiChicken, GiDuck } from 'react-icons/gi';
-import { addTray, removeTray } from '../services/mockTraysService';
+import { addTray, removeTray } from '../services/traysService';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -316,7 +316,7 @@ const TrayModal = ({ tray, onClose }) => {
   };
   
   // Handle adding a new tray with selected date
-  const handleAddTrayWithSelectedDate = () => {
+  const handleAddTrayWithSelectedDate = async () => {
     // Vérifier si un type d'œuf a été sélectionné
     if (!selectedType) {
       setError('Veuillez sélectionner un type d\'œuf');
@@ -332,30 +332,20 @@ const TrayModal = ({ tray, onClose }) => {
     setError('');
     
     try {
-      // Create new tray object with the selected egg type
-      const newTray = {
-        door: door,
-        row: row, 
-        position: position,
-        eggType: selectedType,
-        addedDate: selectedDate,
-        count: 1
-      };
-      
-      // Call mock service to add tray
-      addTray({
+      // Add tray with selected date
+      await addTray({
         door,
         row,
         position,
-        eggType: selectedType,
-        addedDate: selectedDate
+        addedDate: selectedDate,
+        notes: '',
+        eggType: selectedType
       });
       
-      // Close modal with refresh signal
       onClose(true);
-    } catch (err) {
-      setError('Erreur lors de l\'ajout du plateau.');
-    } finally {
+    } catch (error) {
+      console.error('Error adding tray:', error);
+      setError(error.message || 'Une erreur est survenue lors de l\'ajout du plateau');
       setLoading(false);
     }
   };

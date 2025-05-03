@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TrayModal from './TrayModal';
-import { getActiveTrays } from '../services/mockTraysService';
+import { getActiveTrays } from '../services/traysService';
 // Duck and chicken emojis are used for direct display
 
 const IncubatorContainer = styled.div`
@@ -189,10 +189,14 @@ const Incubator = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   useEffect(() => {
-    // Fetch active trays using mock service
-    const fetchTrays = () => {
-      const activeTrays = getActiveTrays();
-      setTrays(activeTrays);
+    // Fetch active trays using service
+    const fetchTrays = async () => {
+      try {
+        const activeTrays = await getActiveTrays();
+        setTrays(activeTrays);
+      } catch (error) {
+        console.error('Error fetching active trays:', error);
+      }
     };
     
     fetchTrays();
@@ -257,14 +261,18 @@ const Incubator = () => {
   };
   
   // Handle modal close
-  const handleModalClose = (refresh = false) => {
+  const handleModalClose = async (refresh = false) => {
     setIsModalOpen(false);
     setSelectedTray(null);
     
     if (refresh) {
       // Refresh trays data
-      const activeTrays = getActiveTrays();
-      setTrays(activeTrays);
+      try {
+        const activeTrays = await getActiveTrays();
+        setTrays(activeTrays);
+      } catch (error) {
+        console.error('Error refreshing trays:', error);
+      }
     }
   };
   

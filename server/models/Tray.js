@@ -35,6 +35,12 @@ const TraySchema = new mongoose.Schema({
   },
   notes: {
     type: String
+  },
+  eggType: {
+    type: String,
+    enum: ['chicken', 'duck'],
+    required: true,
+    default: 'chicken'
   }
 }, {
   timestamps: true

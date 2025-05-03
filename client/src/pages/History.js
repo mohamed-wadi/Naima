@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getAllTrays, deleteTray, updateTray } from '../services/mockTraysService';
+import { getAllTrays, deleteTray, updateTray } from '../services/traysService';
 import { FaCheck, FaHourglass, FaExclamationTriangle, FaTimes, FaTrashAlt, FaFileExcel } from 'react-icons/fa';
 import { GiChicken, GiDuck } from 'react-icons/gi';
 import * as XLSX from 'xlsx';
@@ -188,16 +188,23 @@ const History = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedTray, setSelectedTray] = useState(null);
   const [trayToDelete, setTrayToDelete] = useState(null);
   const [confirmationMode, setConfirmationMode] = useState(''); // 'delete' ou 'clear'
   
   useEffect(() => {
-    // Fetch all trays using mock service
-    const fetchTrays = () => {
+    // Fetch all trays using service
+    const fetchTrays = async () => {
       setLoading(true);
-      const allTrays = getAllTrays();
-      setTrays(allTrays);
-      setLoading(false);
+      try {
+        const allTrays = await getAllTrays();
+        setTrays(allTrays);
+      } catch (error) {
+        console.error('Error fetching trays:', error);
+      } finally {
+        setLoading(false);
+      }
     };
     
     fetchTrays();
@@ -349,6 +356,21 @@ const History = () => {
   };
   
   // Gérer la suppression d'un plateau
+  // Gérer la suppression d'un plateau directement (sans confirmation)
+  const handleDelete = async (id) => {
+    try {
+      await deleteTray(id);
+      // Refresh trays list
+      const updatedTrays = trays.filter(tray => tray._id !== id);
+      setTrays(updatedTrays);
+      setSelectedTray(null);
+      setShowConfirmModal(false);
+    } catch (error) {
+      console.error('Error deleting tray:', error);
+    }
+  };
+  
+  // Gérer la préparation pour suppression d'un plateau (avec confirmation)
   const handleDeleteTray = (tray) => {
     setTrayToDelete(tray);
     setConfirmationMode('delete');
@@ -356,16 +378,35 @@ const History = () => {
   };
   
   // Confirmer la suppression d'un plateau
-  const confirmDeleteTray = () => {
+  const confirmDeleteTray = async () => {
     if (trayToDelete) {
-      deleteTray(trayToDelete._id);
-      
-      // Mettre à jour l'état local
-      setTrays(trays.filter(t => t._id !== trayToDelete._id));
+      try {
+        await deleteTray(trayToDelete._id);
+        // Mettre à jour l'état local
+        setTrays(trays.filter(t => t._id !== trayToDelete._id));
+      } catch (error) {
+        console.error('Erreur lors de la suppression du plateau:', error);
+      }
     }
     
     setShowConfirmation(false);
     setTrayToDelete(null);
+  };
+  
+  const handleUpdateTray = async (id, updates) => {
+    try {
+      const updatedTray = await updateTray(id, updates);
+      // Refresh trays list
+      const updatedTrays = trays.map(tray => {
+        if (tray._id === id) {
+          return updatedTray;
+        }
+        return tray;
+      });
+      setTrays(updatedTrays);
+    } catch (error) {
+      console.error('Error updating tray:', error);
+    }
   };
   
   // Gérer l'effacement de l'historique
@@ -379,18 +420,21 @@ const History = () => {
   };
   
   // Confirmer l'effacement de l'historique
-  const confirmClearHistory = () => {
+  const confirmClearHistory = async () => {
     // Supprimer tous les plateaux qui sont retirés ou qui ont dépassé le seuil d'alerte
     const traysToKeep = trays.filter(tray => !canDeleteTray(tray));
     const traysToDelete = trays.filter(tray => canDeleteTray(tray));
     
-    // Supprimer les plateaux
-    traysToDelete.forEach(tray => {
-      deleteTray(tray._id);
-    });
-    
-    // Mettre à jour l'état local
-    setTrays(traysToKeep);
+    // Supprimer les plateaux de façon asynchrone
+    try {
+      // Utiliser Promise.all pour exécuter toutes les suppressions en parallèle
+      await Promise.all(traysToDelete.map(tray => deleteTray(tray._id)));
+      
+      // Mettre à jour l'état local une fois toutes les suppressions terminées
+      setTrays(traysToKeep);
+    } catch (error) {
+      console.error('Erreur lors de la suppression des plateaux:', error);
+    }
     
     setShowConfirmation(false);
   };

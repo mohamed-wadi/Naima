@@ -60,11 +60,29 @@ Cette commande lancera à la fois le serveur backend et l'application React.
 
 ## Déploiement
 
-L'application est configurée pour un déploiement facile sur Railway:
+L'application est configurée pour un déploiement facile sur Vercel avec MongoDB Atlas:
 
-1. Connectez votre dépôt GitHub à Railway
-2. Configurez les variables d'environnement sur Railway
-3. Railway détectera automatiquement le package.json et déploiera l'application
+### Configuration de MongoDB Atlas
+
+1. Créez un compte sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+2. Créez un nouveau cluster (vous pouvez utiliser l'offre gratuite)
+3. Dans "Database Access", créez un nouvel utilisateur avec les droits de lecture/écriture
+4. Dans "Network Access", ajoutez 0.0.0.0/0 aux adresses IP autorisées (pour Vercel)
+5. Dans "Clusters", cliquez sur "Connect" et sélectionnez "Connect your application"
+6. Copiez l'URI de connexion (remplacez <password> par le mot de passe de votre utilisateur)
+
+### Déploiement sur Vercel
+
+1. Installez Vercel CLI: `npm i -g vercel`
+2. Connectez-vous à votre compte Vercel: `vercel login`
+3. Depuis la racine du projet, exécutez: `vercel`
+4. Configurez les variables d'environnement sur Vercel:
+   - MONGODB_URI: votre URI MongoDB Atlas
+   - TELEGRAM_BOT_TOKEN: votre token de bot Telegram
+   - TELEGRAM_CHAT_ID: votre ID de chat Telegram
+5. Pour les déploiements suivants, utilisez: `vercel --prod`
+
+Vous pouvez également déployer directement depuis l'interface Vercel en connectant votre dépôt GitHub.
 
 ## Licence
 
