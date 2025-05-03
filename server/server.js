@@ -21,9 +21,20 @@ app.use(cors());
 app.use(express.json());
 
 // Connexion à MongoDB
-mongoose.connect(MONGODB_URI)
+if (!MONGODB_URI) {
+  console.error('MONGODB_URI is not defined. Please check your environment variables.');
+  process.exit(1);
+}
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log('Connecté à MongoDB'))
-  .catch(err => console.error('Erreur de connexion à MongoDB:', err));
+  .catch(err => {
+    console.error('Erreur de connexion à MongoDB:', err);
+    process.exit(1);
+  });
 
 // Routes API
 const router = express.Router();
