@@ -121,12 +121,6 @@ const StyledDatePicker = styled(DatePicker)`
   font-size: 1rem;
 `;
 
-const CalendarIcon = styled.div`
-  position: absolute;
-  right: 10px;
-  color: #6c757d;
-`;
-
 const ConfirmationContainer = styled.div`
   margin-top: 20px;
   padding: 15px;
