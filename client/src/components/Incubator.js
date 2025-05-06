@@ -17,11 +17,6 @@ const IncubatorTitle = styled.h2`
   text-align: center;
 `;
 
-const TypeIcon = styled.div`
-  /* Non utilisé pour l'affichage simplifié */
-  display: none;
-`;
-
 const IncubatorFrame = styled.div`
   border: 4px solid #343a40;
   border-radius: 8px;
