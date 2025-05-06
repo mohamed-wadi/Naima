@@ -27,7 +27,7 @@ router.get('/active', async (req, res) => {
 // Add a new tray
 router.post('/', async (req, res) => {
   try {
-    const { door, row, position, addedDate, notes } = req.body;
+    const { door, row, position, addedDate, notes, eggType } = req.body;
     
     // Check if there's already an active tray in this position
     const existingTray = await Tray.findOne({
@@ -48,6 +48,7 @@ router.post('/', async (req, res) => {
       door,
       row,
       position,
+      eggType: eggType || 'chicken', // Utiliser le type d'oeuf sélectionné ou 'chicken' par défaut
       addedDate: addedDate || new Date(),
       notes
     });
