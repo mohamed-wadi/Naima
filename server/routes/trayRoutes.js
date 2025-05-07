@@ -85,18 +85,24 @@ router.post('/', async (req, res) => {
 // Mark a tray as removed
 router.patch('/:id/remove', async (req, res) => {
   try {
-    // Utiliser findByIdAndUpdate pour améliorer l'efficacité (une seule requête au lieu de deux)
-    // findByIdAndUpdate renvoie le document avant mise à jour, donc utiliser {new: true} pour obtenir le document mis à jour
-    const tray = await Tray.findById(req.params.id).lean();
+    // Vérifier d'abord si le plateau existe et s'il n'est pas déjà supprimé pour éviter les doublons
+    const existingTray = await Tray.findById(req.params.id).lean();
     
-    if (!tray) {
-      return res.status(404).json({ message: 'Tray not found' });
+    if (!existingTray) {
+      return res.status(404).json({ message: 'Plateau non trouvé' });
+    }
+    
+    // Si le plateau est déjà marqué comme supprimé, ne rien faire et renvoyer le plateau tel quel
+    // Cela évite les doubles notifications
+    if (existingTray.removed) {
+      console.log(`Plateau ${req.params.id} déjà supprimé, aucune action requise`);
+      return res.status(200).json(existingTray);
     }
     
     // Créer une copie des données du plateau pour le message Telegram
-    const trayData = { ...tray };
+    const trayData = { ...existingTray };
     
-    // Mise à jour du plateau
+    // Mise à jour du plateau avec une seule opération pour améliorer la performance
     const updatedTray = await Tray.findByIdAndUpdate(
       req.params.id,
       { 
@@ -118,7 +124,7 @@ router.patch('/:id/remove', async (req, res) => {
     // Date de retrait formatée
     const removedDate = moment(new Date()).format('D MMMM YYYY');
     
-    // Send confirmation message
+    // Envoyer le message de confirmation une seule fois
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
       const message = `Salam Naima Mouloua\nPlateau Retiré\nPorte ${doorTranslated}\nPlateau ${trayData.row}\nType : ${eggTypeTranslated}\nAjouté le : ${addedDate}\nRetiré le : ${removedDate}`;
       
