@@ -270,7 +270,7 @@ const TrayModal = ({ tray, onClose }) => {
   };
 
   // Handle adding a new tray with current date
-  const handleAddTrayWithCurrentDate = () => {
+  const handleAddTrayWithCurrentDate = async () => {
     // Vérifier si un type d'œuf a été sélectionné
     if (!selectedType) {
       setError('Veuillez sélectionner un type d\'œuf');
@@ -281,29 +281,33 @@ const TrayModal = ({ tray, onClose }) => {
     setError('');
     
     try {
-      // Create new tray object with the selected egg type
-      const newTray = {
-        door: door,
-        row: row, 
-        position: position,
-        eggType: selectedType,
-        addedDate: new Date(),
-        count: 1
-      };
-      
-      // Call mock service to add tray
-      addTray({
+      // Créer l'objet du plateau avec le type d'œuf sélectionné
+      const trayData = {
         door,
         row,
         position,
         eggType: selectedType,
         addedDate: new Date()
-      });
+      };
       
-      // Close modal with refresh signal
-      onClose(true);
+      // Ajouter un délai visuel minimal pour montrer que quelque chose se passe
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Appeler le service pour ajouter le plateau avec async/await
+      await addTray(trayData);
+      
+      // Annoncer le succès à l'utilisateur
+      setStatus('success');
+      
+      // Fermer la modal après un court délai pour feedback visuel
+      setTimeout(() => {
+        // Fermer la modal avec signal de rafraîchissement
+        onClose(true);
+      }, 500);
     } catch (err) {
-      setError('Erreur lors de l\'ajout du plateau.');
+      console.error('Erreur lors de l\'ajout du plateau:', err);
+      setError('Erreur lors de l\'ajout du plateau. Veuillez réessayer.');
+      setStatus('error');
     } finally {
       setLoading(false);
     }

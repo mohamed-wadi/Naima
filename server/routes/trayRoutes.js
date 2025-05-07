@@ -85,23 +85,48 @@ router.post('/', async (req, res) => {
 // Mark a tray as removed
 router.patch('/:id/remove', async (req, res) => {
   try {
-    const tray = await Tray.findById(req.params.id);
+    // Utiliser findByIdAndUpdate pour améliorer l'efficacité (une seule requête au lieu de deux)
+    // findByIdAndUpdate renvoie le document avant mise à jour, donc utiliser {new: true} pour obtenir le document mis à jour
+    const tray = await Tray.findById(req.params.id).lean();
     
     if (!tray) {
       return res.status(404).json({ message: 'Tray not found' });
     }
     
-    tray.removed = true;
-    tray.removedDate = new Date();
+    // Créer une copie des données du plateau pour le message Telegram
+    const trayData = { ...tray };
     
-    const updatedTray = await tray.save();
+    // Mise à jour du plateau
+    const updatedTray = await Tray.findByIdAndUpdate(
+      req.params.id,
+      { 
+        removed: true, 
+        removedDate: new Date() 
+      },
+      { new: true }
+    );
+    
+    // Traduction du type d'œuf
+    const eggTypeTranslated = trayData.eggType === 'duck' ? 'canard' : 'poulet';
+    
+    // Traduction de la porte
+    const doorTranslated = trayData.door === 'left' ? 'Gauche' : 'Droite';
+    
+    // Date d'ajout formatée
+    const addedDate = moment(trayData.addedDate).format('D MMMM YYYY');
+    
+    // Date de retrait formatée
+    const removedDate = moment(new Date()).format('D MMMM YYYY');
     
     // Send confirmation message
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-      const message = `Tray from ${tray.door} door, row ${tray.row}, ${tray.position} position has been marked as removed.`;
-      await sendTelegramNotification(message);
+      const message = `Salam Naima Mouloua\nPlateau Retiré\nPorte ${doorTranslated}\nPlateau ${trayData.row}\nType : ${eggTypeTranslated}\nAjouté le : ${addedDate}\nRetiré le : ${removedDate}`;
+      
+      // Envoyer la notification sans attendre la réponse pour améliorer la performance
+      sendTelegramNotification(message).catch(err => console.error('Erreur envoi notification Telegram:', err));
     }
     
+    // Répondre immédiatement pour améliorer la performance perçue
     res.json(updatedTray);
   } catch (error) {
     res.status(400).json({ message: error.message });
