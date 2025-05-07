@@ -235,6 +235,7 @@ const TrayModal = ({ tray, onClose }) => {
   const [selectedType, setSelectedType] = useState('chicken'); // 'chicken' or 'duck'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [status, setStatus] = useState(''); // '', 'success', 'error'
   
   const { door, row, position, existingTray } = tray;
   
