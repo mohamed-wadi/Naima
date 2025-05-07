@@ -40,8 +40,36 @@ const NavLink = styled(Link)`
   }
 `;
 
+const PrayerDisplay = styled.div`
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  font-size: 1.2rem;
+  direction: rtl;
+  flex: 1;
+  margin: 0 15px;
+`;
+
+
+
 const Navbar = () => {
   const [dateTime, setDateTime] = useState(new Date());
+  const [currentPrayerIndex, setCurrentPrayerIndex] = useState(0);
+  
+  // Array of Islamic prayers (ادعية) from the image
+  const prayers = [
+    "سُبْحَانَ اللّٰه",
+    "الْحَمْدُلِلّٰه",
+    "لَا إِلٰهَ إِلَّا اللّٰه",
+    "اللّٰهُ أَكْبَر",
+    "سُبْحَانَ اللّٰهِ وَ بِحَمْدِه",
+    "سُبْحَانَ اللّٰهِ الْعَظِيم",
+    "أَسْتَغْفِرُ اللّٰهَ وَ أَتُوبُ إِلَيْه",
+    "لَا حَوْلَ وَ لَا قُوَّةَ إِلَّا بِاللّٰه",
+    "اللّٰهُمَّ صَلِّ وَسَلِّم عَلَى نَبِيِّنَا مُحَمَّد",
+    "لَا إِلٰهَ إِلَّا اللّٰهُ مُحَمَّدٌ رَسُولُ اللّٰه",
+    "بِسْمِ اللّٰهِ وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِين"
+  ];
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -50,6 +78,17 @@ const Navbar = () => {
     
     return () => {
       clearInterval(timer);
+    };
+  }, []);
+  
+  // Effect for rotating prayers every 20 seconds
+  useEffect(() => {
+    const prayerTimer = setInterval(() => {
+      setCurrentPrayerIndex((prevIndex) => (prevIndex + 1) % prayers.length);
+    }, 10000); // 10 seconds
+    
+    return () => {
+      clearInterval(prayerTimer);
     };
   }, []);
   
@@ -65,6 +104,9 @@ const Navbar = () => {
   return (
     <NavContainer>
       <Logo>{formatDate(dateTime)} | {formatTime(dateTime)}</Logo>
+      <PrayerDisplay>
+        {prayers[currentPrayerIndex]}
+      </PrayerDisplay>
       <NavLinks>
         <NavLink to="/">
           <FaHome /> Accueil
