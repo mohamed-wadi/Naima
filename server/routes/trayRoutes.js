@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
     
     // Send confirmation message
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-      const message = `Salam Naima Mouloua\nPlateau Ajouté Dans\nPorte ${doorTranslated}\nPlateau ${row}\nPosition ${positionTranslated}\nType : ${eggTypeTranslated}\nAjouté le : ${moment(savedTray.addedDate).format('D MMMM YYYY')}\nRappelez-vous de le retirer avant le : ${removalDate}`;
+      const message = `Salam Naima Mouloua\nPlateau Ajouté\nPorte ${doorTranslated}\nPlateau ${row}\nType : ${eggTypeTranslated}\nAjouté le : ${moment(savedTray.addedDate).format('D MMMM YYYY')}\nRappelez-vous de le retirer avant le : ${removalDate}`;
       await sendTelegramNotification(message);
     }
     

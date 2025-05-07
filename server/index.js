@@ -188,7 +188,19 @@ cron.schedule('0 * * * *', async () => {
     
     // Send notifications for each tray
     for (const tray of traysToRemove) {
-      const message = `Time to remove tray from ${tray.door} door, row ${tray.row}, position ${tray.position}! It has been 18 days since it was added on ${moment(tray.addedDate).format('MMMM Do YYYY')}.`;
+      // Déterminer le nombre de jours d'incubation selon le type d'œuf
+      const incubationDays = tray.eggType === 'duck' ? 25 : 18;
+      
+      // Traduction du type d'œuf
+      const eggTypeTranslated = tray.eggType === 'duck' ? 'canard' : 'poulet';
+      
+      // Traduction de la porte
+      const doorTranslated = tray.door === 'left' ? 'Gauche' : 'Droite';
+      
+      // Format de la date en français
+      const addedDateFormatted = moment(tray.addedDate).format('D MMMM YYYY');
+      
+      const message = `Il est temps de retirer le plateau de la porte ${doorTranslated}, Plateau ${tray.row} ! Cela fait ${incubationDays} jours qu'il a été ajouté, le ${addedDateFormatted}.`;
       
       // Send Telegram notification
       if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
