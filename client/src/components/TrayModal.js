@@ -473,6 +473,15 @@ const TrayModal = ({ tray, onClose }) => {
             selected={selectedDate}
             onChange={date => setSelectedDate(date)}
             maxDate={new Date()}
+            minDate={(() => {
+              // Calculer la date minimale en fonction du type d'œuf
+              const today = new Date();
+              const minDate = new Date(today);
+              // 18 jours pour poulet, 25 jours pour canard
+              const daysToSubtract = selectedType === 'duck' ? 25 : 18;
+              minDate.setDate(minDate.getDate() - daysToSubtract);
+              return minDate;
+            })()}
             inline
           />
         </DatePickerWrapper>
