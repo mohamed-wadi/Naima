@@ -29,6 +29,8 @@ router.post('/', async (req, res) => {
   try {
     const { door, row, position, addedDate, notes, eggType } = req.body;
     
+    console.log('Received egg type:', eggType); // Log pour déboguer
+    
     // Check if there's already an active tray in this position
     const existingTray = await Tray.findOne({
       door,
@@ -55,12 +57,22 @@ router.post('/', async (req, res) => {
     
     const savedTray = await newTray.save();
     
-    // Calculate the removal date (18 days from added date)
-    const removalDate = moment(savedTray.addedDate).add(18, 'days').format('MMMM Do YYYY');
+    // Calculate the removal date (18 days for chicken, 25 days for duck)
+    const daysToAdd = savedTray.eggType === 'duck' ? 25 : 18;
+    const removalDate = moment(savedTray.addedDate).add(daysToAdd, 'days').format('D MMMM YYYY');
+    
+    // Traduction du type d'œuf
+    const eggTypeTranslated = savedTray.eggType === 'duck' ? 'canard' : 'poulet';
+    
+    // Traduction de la porte
+    const doorTranslated = savedTray.door === 'left' ? 'Gauche' : 'Droite';
+    
+    // Traduction de la position
+    const positionTranslated = savedTray.position === 'left' ? 'Gauche' : 'Droite';
     
     // Send confirmation message
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-      const message = `New tray added to ${door} door, row ${row}, ${position} position. Remember to remove it on ${removalDate}!`;
+      const message = `Salam Naima Mouloua\nPlateau Ajouté Dans\nPorte ${doorTranslated}\nPlateau ${row}\nPosition ${positionTranslated}\nType : ${eggTypeTranslated}\nAjouté le : ${moment(savedTray.addedDate).format('D MMMM YYYY')}\nRappelez-vous de le retirer avant le : ${removalDate}`;
       await sendTelegramNotification(message);
     }
     
