@@ -349,10 +349,10 @@ const History = () => {
     }
   };
   
-  // Détermine si un plateau peut être supprimé (soit retiré, soit a dépassé le seuil d'alerte)
+  // Détermine si un plateau peut être supprimé (uniquement s'il a été retiré)
   const canDeleteTray = (tray) => {
-    const warningThreshold = tray.eggType === 'duck' ? 23 : 16;
-    return tray.removed || calculateDaysInIncubator(tray.addedDate) >= warningThreshold;
+    // Ne permet la suppression que si le plateau a été retiré de la couveuse
+    return tray.removed;
   };
   
   // Gérer la suppression d'un plateau
@@ -566,7 +566,7 @@ const History = () => {
         </ExportButton>
         
         <ClearHistoryButton onClick={handleClearHistory}>
-          <FaTrashAlt /> Effacer l'historique des éléments retirés
+          <FaTrashAlt /> Effacer l'historique des plateaux retirés
         </ClearHistoryButton>
       </ButtonsContainer>
       
@@ -581,7 +581,7 @@ const History = () => {
             <ModalText>
               {confirmationMode === 'delete' ? 
                 'Êtes-vous sûr de vouloir supprimer ce plateau de l\'historique ?' : 
-                'Êtes-vous sûr de vouloir effacer tous les plateaux retirés ou qui ont dépassé 16 jours de l\'historique ?'
+                'Êtes-vous sûr de vouloir effacer tous les plateaux retirés de l\'historique ?'
               }
             </ModalText>
             <ModalButtons>
