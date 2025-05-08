@@ -81,11 +81,11 @@ const Navbar = () => {
     };
   }, []);
   
-  // Effect for rotating prayers every 20 seconds
+  // Effect for rotating prayers every 6 seconds
   useEffect(() => {
     const prayerTimer = setInterval(() => {
       setCurrentPrayerIndex((prevIndex) => (prevIndex + 1) % prayers.length);
-    }, 10000); // 10 seconds
+    }, 6000); // 6 seconds
     
     return () => {
       clearInterval(prayerTimer);
