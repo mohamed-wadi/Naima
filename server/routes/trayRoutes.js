@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
     
     // Send confirmation message
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-      const message = `Salam Naima Mouloua\nPlateau Ajouté\nPorte ${doorTranslated}\nPlateau ${row}\nType : ${eggTypeTranslated}\nAjouté le : ${moment(savedTray.addedDate).format('D MMMM YYYY')}\nRappelez-vous de le retirer avant le : ${removalDate}`;
+      const message = `Salam famille wadi\nPlateau Ajouté\nPorte ${doorTranslated}\nPlateau ${row}\nType : ${eggTypeTranslated}\nAjouté le : ${moment(savedTray.addedDate).format('D MMMM YYYY')}\nRappelez-vous de le retirer avant le : ${removalDate}`;
       await sendTelegramNotification(message);
     }
     
@@ -126,7 +126,7 @@ router.patch('/:id/remove', async (req, res) => {
     
     // Envoyer le message de confirmation une seule fois
     if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-      const message = `Salam Naima Mouloua\nPlateau Retiré\nPorte ${doorTranslated}\nPlateau ${trayData.row}\nType : ${eggTypeTranslated}\nAjouté le : ${addedDate}\nRetiré le : ${removedDate}`;
+      const message = `Salam famille wadi\nPlateau Retiré\nPorte ${doorTranslated}\nPlateau ${trayData.row}\nType : ${eggTypeTranslated}\nAjouté le : ${addedDate}\nRetiré le : ${removedDate}`;
       
       // Envoyer la notification sans attendre la réponse pour améliorer la performance
       sendTelegramNotification(message).catch(err => console.error('Erreur envoi notification Telegram:', err));
