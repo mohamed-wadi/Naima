@@ -409,8 +409,8 @@ const TrayModal = ({ tray, onClose }) => {
       return (
         <>
           <TrayInfo>
-            <TrayInfoItem><strong>{t.doorLabel}</strong> {door === 'left' ? t.leftDoor.replace('Porte ', '') : t.rightDoor.replace('Porte ', '')}</TrayInfoItem>
-            <TrayInfoItem><strong>{t.trayLabel}</strong> {row}</TrayInfoItem>
+            <TrayInfoItem><strong>Porte:</strong> {door === 'left' ? 'Gauche' : 'Droite'}</TrayInfoItem>
+            <TrayInfoItem><strong>Plateau:</strong> {row}</TrayInfoItem>
           </TrayInfo>
           
           {/* Directement à la sélection du type d'œuf */}
@@ -500,10 +500,10 @@ const TrayModal = ({ tray, onClose }) => {
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          {t.back}
+          Retour
         </CancelButton>
         <AddButton onClick={handleAddTrayWithSelectedDate} disabled={loading}>
-          <FaCheck /> {t.confirm}
+          <FaCheck /> Confirmer
         </AddButton>
       </ButtonGroup>
     </>
@@ -513,15 +513,15 @@ const TrayModal = ({ tray, onClose }) => {
   const renderConfirmRemoveView = () => (
     <>
       <TrayInfo>
-        <TrayInfoItem><strong>{t.doorLabel}</strong> {door === 'left' ? t.leftDoor.replace('Porte ', '') : t.rightDoor.replace('Porte ', '')}</TrayInfoItem>
-        <TrayInfoItem><strong>{t.trayLabel}</strong> {row}</TrayInfoItem>
-        <TrayInfoItem><strong>{t.type}:</strong> {existingTray.eggType === 'duck' ? (
-          <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> {t.duckLabel} <small>{t.duckDays}</small></span>
+        <TrayInfoItem><strong>Porte:</strong> {door === 'left' ? 'Gauche' : 'Droite'}</TrayInfoItem>
+        <TrayInfoItem><strong>Plateau:</strong> {row}</TrayInfoItem>
+        <TrayInfoItem><strong>Type:</strong> {existingTray.eggType === 'duck' ? (
+          <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> Canard <small>(25 jours)</small></span>
         ) : (
-          <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> {t.chickenLabel} <small>{t.chickenDays}</small></span>
+          <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> Poulet <small>(18 jours)</small></span>
         )}</TrayInfoItem>
-        <TrayInfoItem><strong>{t.addedDate}</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
-        <TrayInfoItem><strong>{t.daysInIncubator}</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
+        <TrayInfoItem><strong>Date d'ajout:</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
+        <TrayInfoItem><strong>Jours dans la couveuse:</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
       </TrayInfo>
       
       <ConfirmationContainer>
@@ -532,10 +532,10 @@ const TrayModal = ({ tray, onClose }) => {
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          {t.cancel}
+          Annuler
         </CancelButton>
         <RemoveButton onClick={handleRemoveTray} disabled={loading}>
-          <FaCheck /> {t.confirm}
+          <FaCheck /> Confirmer
         </RemoveButton>
       </ButtonGroup>
     </>
@@ -587,10 +587,10 @@ const TrayModal = ({ tray, onClose }) => {
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          {t.back}
+          Retour
         </CancelButton>
         <AddButton onClick={handleAddTrayWithCurrentDate} disabled={loading}>
-          <FaCheck /> {t.confirm}
+          <FaCheck /> Confirmer
         </AddButton>
       </ButtonGroup>
     </>

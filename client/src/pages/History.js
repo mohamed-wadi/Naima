@@ -566,11 +566,11 @@ const History = () => {
         </ExportButton>
         
         <ClearHistoryButton onClick={handleClearHistory}>
-          <FaTrashAlt /> {t.clearHistory}
+          <FaTrashAlt /> Effacer l'historique des plateaux retirés
         </ClearHistoryButton>
       </ButtonsContainer>
       
-      <TodayNote>{t.todayIs} {getTodayDate()}</TodayNote>
+      <TodayNote>Note: Aujourd'hui c'est le {getTodayDate()}</TodayNote>
       
       {showConfirmation && (
         <ConfirmationModal>
