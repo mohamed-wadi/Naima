@@ -47,13 +47,19 @@ const Home = () => {
           2. Cliquez sur n'importe quel plateau pour ajouter des œufs ou voir/retirer des œufs existants.
         </InfoText>
         <InfoText>
-          3. Pour chaque plateau, vous verrez le nombre de jours passés dans la couveuse.
+          3. Choisissez le type d'œuf: canard (25 jours) ou poulet (18 jours).
         </InfoText>
         <InfoText>
-          4. Vous recevrez une notification lorsqu'un plateau aura été dans la couveuse pendant 18 jours.
+          4. Utilisez le calendrier pour une date personnalisée si vous avez ajouté les œufs avant aujourd'hui.
         </InfoText>
         <InfoText>
-          5. Consultez la page Historique pour voir tous les plateaux et leur statut.
+          5. Pour chaque plateau, vous verrez le nombre de jours passés dans la couveuse.
+        </InfoText>
+        <InfoText>
+          6. Vous recevrez une notification à l'approche de la date d'éclosion.
+        </InfoText>
+        <InfoText>
+          7. Consultez la page Historique pour voir tous les plateaux et leur statut.
         </InfoText>
       </InfoBox>
     </HomeContainer>
