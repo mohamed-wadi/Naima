@@ -24,9 +24,26 @@ export const LanguageProvider = ({ children }) => {
     if (language === 'ar') {
       document.documentElement.dir = 'rtl';
       document.body.style.fontFamily = "'Amiri', 'Arial', sans-serif";
+      
+      // Add CSS to ensure doors maintain left/right orientation
+      const style = document.createElement('style');
+      style.id = 'rtl-override';
+      style.innerHTML = `
+        /* Keep doors in the same visual position */
+        .doors-container {
+          flex-direction: row !important;
+        }
+      `;
+      document.head.appendChild(style);
     } else {
       document.documentElement.dir = 'ltr';
       document.body.style.fontFamily = "'Roboto', 'Arial', sans-serif";
+      
+      // Remove RTL override styles if they exist
+      const rtlStyle = document.getElementById('rtl-override');
+      if (rtlStyle) {
+        rtlStyle.remove();
+      }
     }
   }, [language]);
   

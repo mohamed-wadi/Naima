@@ -64,8 +64,8 @@ export const translations = {
     // Home page
     incubationTracking: "متابعة الحضانة",
     couveuse: "الحاضنة",
-    leftDoor: "الباب الأيسر",
-    rightDoor: "الباب الأيمن",
+    leftDoor: "الباب الأيسر", // Keep as left door 
+    rightDoor: "الباب الأيمن", // Keep as right door
     tray: "الصينية",
     back: "←",
     

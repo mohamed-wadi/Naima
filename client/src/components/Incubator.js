@@ -52,6 +52,11 @@ const DoorsContainer = styled.div`
   display: flex;
   width: 100%;
   margin-top: 30px;
+  flex-direction: row; /* Always left-to-right, regardless of language */
+  
+  @media (max-width: 480px) {
+    margin-top: 20px;
+  }
 `;
 
 const Door = styled.div`
@@ -278,7 +283,7 @@ const Incubator = () => {
     <IncubatorFrame>
       <FrameLabel>{t.couveuse}</FrameLabel>
       {/* Signature removed */}
-      <DoorsContainer>
+      <DoorsContainer className="doors-container">
         <Door onClick={() => handleDoorClick('left')}>
           {t.leftDoor}
         </Door>
