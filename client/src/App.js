@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import History from './pages/History';
-import { LanguageProvider } from './contexts/LanguageContext';
 import './App.css';
 
 const AppContainer = styled.div`
@@ -15,17 +14,15 @@ const AppContainer = styled.div`
 
 function App() {
   return (
-    <LanguageProvider>
-      <Router>
-        <AppContainer>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/history" element={<History />} />
-          </Routes>
-        </AppContainer>
-      </Router>
-    </LanguageProvider>
+    <Router>
+      <AppContainer>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+      </AppContainer>
+    </Router>
   );
 }
 

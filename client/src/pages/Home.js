@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Incubator from '../components/Incubator';
 import { FaInfoCircle } from 'react-icons/fa';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -32,8 +31,18 @@ const InfoText = styled.p`
   line-height: 1.5;
 `;
 
+const InfoTitle = styled.span`
+  font-weight: bold;
+  margin-left: 10px;
+`;
+
+const InfoItem = styled.p`
+  margin: 5px 0;
+  line-height: 1.5;
+`;
+
 const Home = () => {
-  const { t } = useLanguage();
+  // Translation functionality removed
   
   return (
     <HomeContainer>
@@ -41,29 +50,16 @@ const Home = () => {
       
       <InfoBox>
         <InfoHeader>
-          <FaInfoCircle /> {t.howToUse}
+          <FaInfoCircle />
+          <InfoTitle>Comment utiliser cette application</InfoTitle>
         </InfoHeader>
-        <InfoText>
-          {t.step1}
-        </InfoText>
-        <InfoText>
-          {t.step2}
-        </InfoText>
-        <InfoText>
-          {t.step3}
-        </InfoText>
-        <InfoText>
-          {t.step4}
-        </InfoText>
-        <InfoText>
-          {t.step5}
-        </InfoText>
-        <InfoText>
-          {t.step6}
-        </InfoText>
-        <InfoText>
-          {t.step7}
-        </InfoText>
+        <InfoItem>1. Sélectionnez une porte (gauche ou droite) pour voir les plateaux à l'intérieur.</InfoItem>
+        <InfoItem>2. Cliquez sur n'importe quel plateau pour ajouter des œufs ou voir/retirer des œufs existants.</InfoItem>
+        <InfoItem>3. Choisissez le type d'œuf: canard (25 jours) ou poulet (18 jours).</InfoItem>
+        <InfoItem>4. Utilisez le calendrier pour une date personnalisée si vous avez ajouté les œufs avant aujourd'hui.</InfoItem>
+        <InfoItem>5. Pour chaque plateau, vous verrez le nombre de jours passés dans la couveuse.</InfoItem>
+        <InfoItem>6. Vous recevrez une notification à l'approche de la date d'éclosion.</InfoItem>
+        <InfoItem>7. Consultez la page Historique pour voir tous les plateaux et leur statut.</InfoItem>
       </InfoBox>
     </HomeContainer>
   );

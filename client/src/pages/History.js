@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { getAllTrays, deleteTray, updateTray } from '../services/traysService';
 import { FaCheck, FaHourglass, FaExclamationTriangle, FaTimes, FaTrashAlt, FaFileExcel } from 'react-icons/fa';
 import { GiChicken, GiDuck } from 'react-icons/gi';
-import { useLanguage } from '../contexts/LanguageContext';
-import { translations } from '../translations';
 import * as XLSX from 'xlsx';
 
 // Définir l'URL de base pour les requêtes API
@@ -194,7 +192,6 @@ const History = () => {
   const [selectedTray, setSelectedTray] = useState(null);
   const [trayToDelete, setTrayToDelete] = useState(null);
   const [confirmationMode, setConfirmationMode] = useState(''); // 'delete' ou 'clear'
-  const { language, t } = useLanguage();
   
   useEffect(() => {
     // Fetch all trays using service
@@ -228,45 +225,33 @@ const History = () => {
     return hasValidDate && hasValidEggType && hasValidDoor && hasValidRow;
   });
   
-  // Formatte la date pour l'affichage en utilisant les traductions des mois
+  // Formatte la date pour l'affichage en français
   const formatDate = (date) => {
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) return ''; // Date invalide
     
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    
-    // Utiliser les mois traduits en fonction de la langue actuelle
-    const monthName = translations.months[language][month];
-    
-    // Formatter selon la langue - using western digits for both languages
-    return `${day} ${monthName} ${year}`;
+    // Utilise le format de date français
+    return dateObj.toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
   
   // Formatte le jour de la semaine et la date ensemble sur une ligne avec l'heure et les minutes
-  const formatFullDate = (date) => {
-    // Vérifier que la date est valide
-    if (!date || isNaN(new Date(date).getTime())) {
-      return '';
-    }
-    
+  const formatDayAndDate = (date) => {
     const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    const weekdayIndex = dateObj.getDay();
+    if (isNaN(dateObj.getTime())) return ''; // Date invalide
     
-    // Utiliser les jours et mois traduits en fonction de la langue actuelle
-    const weekdayName = translations.weekdays[language][weekdayIndex];
-    const monthName = translations.months[language][month];
-    
-    // Formatage de l'heure au format 24h avec padding des zéros si nécessaire
-    const hours = dateObj.getHours().toString().padStart(2, '0');
-    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-    const timeStr = `${hours}:${minutes}`;
-    
-    return `${weekdayName} ${day} ${monthName} ${year} ${timeStr}`;
+    // Formatte avec le jour de la semaine complet en français
+    return dateObj.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
   
   // Calcule la date de complétion (18 jours pour poulet, 25 pour canard)
@@ -313,8 +298,8 @@ const History = () => {
   
   // Récupère le côté de la porte dans la langue actuelle
   const getDoorSide = (door) => {
-    if (door === 'left') return t.leftDoor;
-    if (door === 'right') return t.rightDoor;
+    if (door === 'left') return 'Porte gauche';
+    if (door === 'right') return 'Porte droite';
     return '';
   };
   
@@ -325,7 +310,7 @@ const History = () => {
     const month = today.getMonth();
     
     // Utiliser les mois traduits en fonction de la langue actuelle
-    const monthName = translations.months[language][month];
+    const monthName = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'][month];
     
     return `${day} ${monthName}`;
   };
@@ -354,13 +339,13 @@ const History = () => {
     const warningThreshold = tray.eggType === 'duck' ? 23 : 16;
     
     if (tray.removed) {
-      return t.removed_status;
+      return 'Retiré';
     } else if (daysInIncubator >= incubationPeriod) {
-      return `${t.overdue} ${daysInIncubator - incubationPeriod} ${t.days}`;
+      return `Dépassé de ${daysInIncubator - incubationPeriod} jours`;
     } else if (daysInIncubator >= warningThreshold) {
-      return t.readyToRemove;
+      return 'Prêt à retirer';
     } else {
-      return t.inIncubation;
+      return 'En incubation';
     }
   };
   
@@ -474,8 +459,8 @@ const History = () => {
         "Porte": getDoorSide(tray.door) + (tray.removed ? ' (Retiré)' : ''),
         "N° Plateau": `Plateau ${tray.row}`,
         "Type": tray.eggType === 'duck' ? 'Canard' : 'Poulet',
-        "Date d'ajout": formatFullDate(tray.addedDate),
-        "Date de complétion": formatFullDate(completionDate),
+        "Date d'ajout": formatDayAndDate(tray.addedDate),
+        "Date de complétion": formatDayAndDate(completionDate),
         "Jours restants": tray.removed ? 'Retiré' : (isOverdue ? `Dépassé de ${daysInIncubator - incubationPeriod} jours` : `${daysRemaining} jours`),
         "Statut": tray.removed ? 'Retiré' : (isOverdue ? 'Dépassé' : 'En incubation'),
         "Notes": tray.notes || ''
@@ -497,30 +482,30 @@ const History = () => {
   
   return (
     <HistoryContainer>
-      <HistoryTitle>{t.historyTitle}</HistoryTitle>
+      <HistoryTitle>Histoire des plateaux</HistoryTitle>
       
       <TableContainer>
         <Table>
           <thead>
             <Tr>
-              <Th>{t.door}</Th>
-              <Th>{t.trayNumber}</Th>
-              <Th>{t.type}</Th>
-              <Th>{t.added}</Th>
-              <Th>{t.completionDate}</Th>
-              <Th>{t.daysRemaining}</Th>
-              <Th>{t.status}</Th>
-              <Th>{t.action}</Th>
+              <Th>Porte</Th>
+              <Th>N° Plateau</Th>
+              <Th>Type</Th>
+              <Th>Date d'ajout</Th>
+              <Th>Date de complétion</Th>
+              <Th>Jours restants</Th>
+              <Th>Statut</Th>
+              <Th>Action</Th>
             </Tr>
           </thead>
           <tbody>
             {loading ? (
               <Tr>
-                <Td colSpan="7" style={{ textAlign: 'center' }}>{t.loading}</Td>
+                <Td colSpan="7" style={{ textAlign: 'center' }}>Chargement...</Td>
               </Tr>
             ) : filteredTrays.length === 0 ? (
               <Tr>
-                <Td colSpan="7" style={{ textAlign: 'center' }}>{t.noTrays}</Td>
+                <Td colSpan="7" style={{ textAlign: 'center' }}>Aucun plateau trouvé</Td>
               </Tr>
             ) : (
               filteredTrays.map(tray => {
@@ -533,27 +518,27 @@ const History = () => {
                 return (
                   <Tr key={tray._id}>
                     <Td>{getDoorSide(tray.door)} {tray.removed ? '(Retiré)' : ''}</Td>
-                    <Td>{t.tray} {tray.row}</Td>
+                    <Td>Plateau {tray.row}</Td>
                     <Td>
                       {tray.eggType === 'duck' ? (
                         <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          <GiDuck style={{ color: '#17a2b8' }} /> {t.duck}
+                          <GiDuck style={{ color: '#17a2b8' }} /> Canard
                         </span>
                       ) : (
                         <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          <GiChicken style={{ color: '#ffc107' }} /> {t.chicken}
+                          <GiChicken style={{ color: '#ffc107' }} /> Poulet
                         </span>
                       )}
                     </Td>
-                    <Td>{formatFullDate(tray.addedDate)}</Td>
-                    <Td>{formatFullDate(completionDate)}</Td>
+                    <Td>{formatDayAndDate(tray.addedDate)}</Td>
+                    <Td>{formatDayAndDate(completionDate)}</Td>
                     <Td>
                       {tray.removed ? (
-                        t.removed_status
+                        'Retiré'
                       ) : isOverdue ? (
-                        <DangerText>{t.overdue} {daysInIncubator - incubationPeriod} {t.days}</DangerText>
+                        <DangerText>{`Dépassé de ${daysInIncubator - incubationPeriod} jours`}</DangerText>
                       ) : (
-                        `${daysRemaining} ${t.days}`
+                        `${daysRemaining} jours`
                       )}
                     </Td>
                     <Td>{getStatusIcon(tray)} {getStatusText(tray)}</Td>
@@ -577,7 +562,7 @@ const History = () => {
       
       <ButtonsContainer>
         <ExportButton onClick={exportToExcel}>
-          <FaFileExcel /> {t.exportExcel}
+          <FaFileExcel /> Exporter en Excel
         </ExportButton>
         
         <ClearHistoryButton onClick={handleClearHistory}>

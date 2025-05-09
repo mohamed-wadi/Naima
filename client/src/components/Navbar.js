@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaHome, FaHistory, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
-import { useLanguage } from '../contexts/LanguageContext';
+import { FaHome, FaHistory, FaBars, FaTimes } from 'react-icons/fa';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -97,64 +96,13 @@ const MenuToggle = styled.button`
   }
 `;
 
-const LanguageSelector = styled.div`
-  position: relative;
-  margin-left: 15px;
-`;
 
-const LanguageButton = styled.button`
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 5px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background-color: #e9ecef;
-  }
-`;
-
-const LanguageDropdown = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
-  z-index: 20;
-`;
-
-const LanguageOption = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  border: none;
-  background: none;
-  padding: 8px 12px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  
-  &:hover {
-    background-color: #f8f9fa;
-  }
-`;
 
 
 const Navbar = () => {
   const [dateTime, setDateTime] = useState(new Date());
   const [currentPrayerIndex, setCurrentPrayerIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const { language, changeLanguage, t } = useLanguage();
   
   // Array of Islamic prayers (ادعية) from the image
   const prayers = [
@@ -224,31 +172,16 @@ const Navbar = () => {
         {prayers[currentPrayerIndex]}
       </PrayerDisplay>
       
-      <LanguageSelector>
-        <LanguageButton onClick={toggleLangMenu}>
-          {language === 'fr' ? '🇫🇷' : '🇲🇦'}
-          <FaChevronDown size={12} />
-        </LanguageButton>
-        <LanguageDropdown isOpen={isLangMenuOpen}>
-          <LanguageOption onClick={() => handleLanguageChange('fr')}>
-            🇫🇷 Français
-          </LanguageOption>
-          <LanguageOption onClick={() => handleLanguageChange('ar')}>
-            🇲🇦 العربية
-          </LanguageOption>
-        </LanguageDropdown>
-      </LanguageSelector>
-      
-      <MenuToggle onClick={toggleMenu}>
+      <MenuToggle onClick={() => setIsMenuOpen(!isMenuOpen)}>
         {isMenuOpen ? <FaTimes /> : <FaBars />}
       </MenuToggle>
       
       <NavLinks isOpen={isMenuOpen}>
         <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-          <FaHome /> {t.home}
+          <FaHome /> Accueil
         </NavLink>
         <NavLink to="/history" onClick={() => setIsMenuOpen(false)}>
-          <FaHistory /> {t.history}
+          <FaHistory /> Historique
         </NavLink>
       </NavLinks>
     </NavContainer>

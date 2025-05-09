@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TrayModal from './TrayModal';
 import { getActiveTrays } from '../services/traysService';
-import { useLanguage } from '../contexts/LanguageContext';
 // Duck and chicken emojis are used for direct display
 
 const IncubatorContainer = styled.div`
@@ -188,7 +187,7 @@ const Incubator = () => {
   const [trays, setTrays] = useState([]);
   const [selectedTray, setSelectedTray] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { t } = useLanguage();
+  // Translation functionality removed
   
   useEffect(() => {
     // Fetch active trays using service
@@ -281,14 +280,14 @@ const Incubator = () => {
   // Render closed incubator view
   const renderClosedView = () => (
     <IncubatorFrame>
-      <FrameLabel>{t.couveuse}</FrameLabel>
+      <FrameLabel>Couveuse</FrameLabel>
       {/* Signature removed */}
       <DoorsContainer className="doors-container">
         <Door onClick={() => handleDoorClick('left')}>
-          {t.leftDoor}
+          Porte Gauche
         </Door>
         <Door onClick={() => handleDoorClick('right')}>
-          {t.rightDoor}
+          Porte Droite
         </Door>
       </DoorsContainer>
     </IncubatorFrame>
@@ -297,19 +296,19 @@ const Incubator = () => {
   // Render open door view
   const renderOpenDoorView = (door) => {
     const doorValue = door === 'leftDoor' ? 'left' : 'right';
-    const doorLabel = doorValue === 'left' ? t.leftDoor : t.rightDoor;
+    const doorLabel = doorValue === 'left' ? 'Porte Gauche' : 'Porte Droite';
     
     return (
       <OpenDoorContainer>
         <DoorHeader isOpen={true}>
-          <BackButton onClick={handleBackClick}>{t.back}</BackButton>
+          <BackButton onClick={handleBackClick}>←</BackButton>
           <span>{doorLabel}</span>
           {/* Signature removed */}
         </DoorHeader>
         
         {[1, 2, 3].map(row => (
           <Row key={row}>
-            <RowLabel>{t.tray} {row}</RowLabel>
+            <RowLabel>Plateau {row}</RowLabel>
             <Tray 
               active={isTrayActive(doorValue, row, doorValue === 'left' ? 'right' : 'left')}
               onClick={() => handleTrayClick(door, row)}
@@ -338,7 +337,7 @@ const Incubator = () => {
   
   return (
     <IncubatorContainer>
-      <IncubatorTitle>{t.incubationTracking}</IncubatorTitle>
+      <IncubatorTitle>Suivi d'Incubation</IncubatorTitle>
       
       {view === 'closed' && renderClosedView()}
       {view === 'leftDoor' && renderOpenDoorView('leftDoor')}
