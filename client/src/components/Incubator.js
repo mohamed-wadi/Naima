@@ -9,12 +9,21 @@ const IncubatorContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
+  
+  @media (max-width: 480px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const IncubatorTitle = styled.h2`
   margin-bottom: 20px;
   color: #343a40;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+  }
 `;
 
 const IncubatorFrame = styled.div`
@@ -28,6 +37,11 @@ const IncubatorFrame = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
+  
+  @media (max-width: 480px) {
+    padding: 10px;
+    border-width: 3px;
+  }
 `;
 
 const FrameLabel = styled.div`
@@ -51,6 +65,10 @@ const DoorsContainer = styled.div`
   display: flex;
   width: 100%;
   margin-top: 30px;
+  
+  @media (max-width: 480px) {
+    margin-top: 20px;
+  }
 `;
 
 const Door = styled.div`
@@ -68,6 +86,12 @@ const Door = styled.div`
   &:hover {
     background-color: #ced4da;
   }
+  
+  @media (max-width: 480px) {
+    height: 150px;
+    font-size: 0.9rem;
+    border-width: 1px;
+  }
 `;
 
 const OpenDoorContainer = styled.div`
@@ -78,6 +102,11 @@ const OpenDoorContainer = styled.div`
   width: 100%;
   max-width: 600px;
   position: relative;
+  
+  @media (max-width: 480px) {
+    padding: 10px;
+    border-width: 3px;
+  }
 `;
 
 const DoorHeader = styled.div`
@@ -90,6 +119,12 @@ const DoorHeader = styled.div`
   padding: 10px;
   border-radius: 4px;
   position: relative;
+  
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
 `;
 
 const BackButton = styled.button`
@@ -115,11 +150,20 @@ const Row = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+  }
 `;
 
 const RowLabel = styled.div`
   width: 100px;
   font-weight: bold;
+  
+  @media (max-width: 480px) {
+    width: 80px;
+    font-size: 0.9rem;
+  }
 `;
 
 const Tray = styled.div`
@@ -139,6 +183,12 @@ const Tray = styled.div`
   &:hover {
     transform: scale(1.05);
   }
+  
+  @media (max-width: 480px) {
+    height: 50px;
+    border-width: 1px;
+    margin: 0 3px;
+  }
 `;
 
 const TrayLabel = styled.div`
@@ -153,6 +203,10 @@ const TrayLabel = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
 `;
 
 const DaysIndicator = styled.div`
@@ -175,6 +229,14 @@ const DaysIndicator = styled.div`
   align-items: center;
   font-size: 0.75rem;
   font-weight: bold;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    top: 3px;
+    right: 3px;
+  }
 `;
 
 const Incubator = () => {
