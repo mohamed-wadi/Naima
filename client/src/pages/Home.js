@@ -15,13 +15,6 @@ const InfoBox = styled.div`
   border-radius: 4px;
   margin-top: 20px;
   margin-bottom: 20px;
-  
-  @media (max-width: 480px) {
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-left-width: 3px;
-  }
 `;
 
 const InfoHeader = styled.div`
@@ -31,23 +24,11 @@ const InfoHeader = styled.div`
   font-weight: bold;
   margin-bottom: 10px;
   color: #17a2b8;
-  
-  @media (max-width: 480px) {
-    font-size: 0.95rem;
-    margin-bottom: 8px;
-    gap: 5px;
-  }
 `;
 
 const InfoText = styled.p`
   margin: 5px 0;
   line-height: 1.5;
-  
-  @media (max-width: 480px) {
-    margin: 4px 0;
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
 `;
 
 const Home = () => {
