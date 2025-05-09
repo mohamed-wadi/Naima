@@ -160,7 +160,7 @@ const Navbar = () => {
 
   return (
     <NavContainer>
-      <Logo>{formatDate(dateTime)}</Logo>
+      <Logo>{formatDate(dateTime)} | {formatTime(dateTime)}</Logo>
       
       <TimeDisplay>
         {formatTime(dateTime)}
