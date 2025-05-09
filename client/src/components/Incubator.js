@@ -338,7 +338,7 @@ const Incubator = () => {
   
   return (
     <IncubatorContainer>
-      <IncubatorTitle>Suivi d'Incubation</IncubatorTitle>
+      <IncubatorTitle>{t.incubationTracking}</IncubatorTitle>
       
       {view === 'closed' && renderClosedView()}
       {view === 'leftDoor' && renderOpenDoorView('leftDoor')}

@@ -1,5 +1,21 @@
 // Translations for the egg incubator app
 export const translations = {
+  // Month translations for proper date formatting
+  months: {
+    fr: [
+      'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+      'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+    ],
+    ar: [
+      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ]
+  },
+  // Weekday translations
+  weekdays: {
+    fr: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+    ar: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+  },
   fr: {
     // Navbar
     home: "Accueil",
@@ -43,13 +59,28 @@ export const translations = {
     removed: "Retirés",
     door: "Porte",
     position: "Position",
+    trayNumber: "N° Plateau",
     type: "Type",
     added: "Ajouté le",
+    completionDate: "Date de complétion",
+    daysRemaining: "Jours restants",
     daysInIncubator: "Jours en couveuse",
     status: "Statut",
     action: "Action",
     noTrays: "Aucun plateau trouvé",
+    loading: "Chargement en cours...",
     view: "Voir",
+    exportExcel: "Exporter vers Excel",
+    clearHistory: "Effacer l'historique des plateaux retirés",
+    todayIs: "Note: Aujourd'hui c'est le",
+    chicken: "Poulet",
+    duck: "Canard",
+    removed_status: "Retiré",
+    overdue: "Dépassé de",
+    days: "jours",
+    inIncubation: "En incubation",
+    readyToRemove: "Prêt à être retiré",
+    historyTitle: "Historique des plateaux",
     
     // Confirmations
     confirmRemove: "Êtes-vous sûr de vouloir retirer ce plateau?",
@@ -62,7 +93,7 @@ export const translations = {
     history: "السجل",
     
     // Home page
-    incubationTracking: "متابعة الحضانة",
+    incubationTracking: "متابعة التفريخ",
     couveuse: "الحاضنة",
     leftDoor: "الباب الأيسر", // Keep as left door 
     rightDoor: "الباب الأيمن", // Keep as right door
@@ -99,13 +130,28 @@ export const translations = {
     removed: "تمت إزالتها",
     door: "الباب",
     position: "الموضع",
+    trayNumber: "رقم الصينية",
     type: "النوع",
     added: "تمت الإضافة في",
+    completionDate: "تاريخ الاكتمال",
+    daysRemaining: "الأيام المتبقية",
     daysInIncubator: "الأيام في الحاضنة",
     status: "الحالة",
     action: "الإجراء",
     noTrays: "لم يتم العثور على صواني",
+    loading: "جاري التحميل...",
     view: "عرض",
+    exportExcel: "تصدير إلى إكسل",
+    clearHistory: "مسح سجل الصواني المزالة",
+    todayIs: "ملاحظة: اليوم هو",
+    chicken: "دجاج",
+    duck: "بط",
+    removed_status: "تمت إزالته",
+    overdue: "تجاوز بمقدار",
+    days: "يوم",
+    inIncubation: "قيد التفريخ",
+    readyToRemove: "جاهز للإزالة",
+    historyTitle: "سجل الصواني",
     
     // Confirmations
     confirmRemove: "هل أنت متأكد من أنك تريد إزالة هذه الصينية؟",
