@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaHome, FaHistory, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -153,7 +154,7 @@ const Navbar = () => {
   const [currentPrayerIndex, setCurrentPrayerIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('fr'); // 'fr' for French, 'ar' for Arabic
+  const { language, changeLanguage, t } = useLanguage();
   
   // Array of Islamic prayers (ادعية) from the image
   const prayers = [
@@ -210,11 +211,9 @@ const Navbar = () => {
     if (isMenuOpen) setIsMenuOpen(false);
   };
   
-  const changeLanguage = (lang) => {
-    setCurrentLanguage(lang);
+  const handleLanguageChange = (lang) => {
+    changeLanguage(lang);
     setIsLangMenuOpen(false);
-    // TODO: Implement actual language translation logic
-    console.log(`Language changed to ${lang}`);
   };
 
   return (
@@ -227,15 +226,15 @@ const Navbar = () => {
       
       <LanguageSelector>
         <LanguageButton onClick={toggleLangMenu}>
-          {currentLanguage === 'fr' ? '🇫🇷' : '🇩🇿'}
+          {language === 'fr' ? '🇫🇷' : '🇲🇦'}
           <FaChevronDown size={12} />
         </LanguageButton>
         <LanguageDropdown isOpen={isLangMenuOpen}>
-          <LanguageOption onClick={() => changeLanguage('fr')}>
+          <LanguageOption onClick={() => handleLanguageChange('fr')}>
             🇫🇷 Français
           </LanguageOption>
-          <LanguageOption onClick={() => changeLanguage('ar')}>
-            🇩🇿 العربية
+          <LanguageOption onClick={() => handleLanguageChange('ar')}>
+            🇲🇦 العربية
           </LanguageOption>
         </LanguageDropdown>
       </LanguageSelector>
@@ -246,10 +245,10 @@ const Navbar = () => {
       
       <NavLinks isOpen={isMenuOpen}>
         <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-          <FaHome /> Accueil
+          <FaHome /> {t.home}
         </NavLink>
         <NavLink to="/history" onClick={() => setIsMenuOpen(false)}>
-          <FaHistory /> Historique
+          <FaHistory /> {t.history}
         </NavLink>
       </NavLinks>
     </NavContainer>

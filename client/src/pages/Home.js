@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Incubator from '../components/Incubator';
 import { FaInfoCircle } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -32,34 +33,36 @@ const InfoText = styled.p`
 `;
 
 const Home = () => {
+  const { t } = useLanguage();
+  
   return (
     <HomeContainer>
       <Incubator />
       
       <InfoBox>
         <InfoHeader>
-          <FaInfoCircle /> Comment utiliser cette application
+          <FaInfoCircle /> {t.howToUse}
         </InfoHeader>
         <InfoText>
-          1. Sélectionnez une porte (gauche ou droite) pour voir les plateaux à l'intérieur.
+          {t.step1}
         </InfoText>
         <InfoText>
-          2. Cliquez sur n'importe quel plateau pour ajouter des œufs ou voir/retirer des œufs existants.
+          {t.step2}
         </InfoText>
         <InfoText>
-          3. Choisissez le type d'œuf: canard (25 jours) ou poulet (18 jours).
+          {t.step3}
         </InfoText>
         <InfoText>
-          4. Utilisez le calendrier pour une date personnalisée si vous avez ajouté les œufs avant aujourd'hui.
+          {t.step4}
         </InfoText>
         <InfoText>
-          5. Pour chaque plateau, vous verrez le nombre de jours passés dans la couveuse.
+          {t.step5}
         </InfoText>
         <InfoText>
-          6. Vous recevrez une notification à l'approche de la date d'éclosion.
+          {t.step6}
         </InfoText>
         <InfoText>
-          7. Consultez la page Historique pour voir tous les plateaux et leur statut.
+          {t.step7}
         </InfoText>
       </InfoBox>
     </HomeContainer>

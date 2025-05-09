@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TrayModal from './TrayModal';
 import { getActiveTrays } from '../services/traysService';
+import { useLanguage } from '../contexts/LanguageContext';
 // Duck and chicken emojis are used for direct display
 
 const IncubatorContainer = styled.div`
@@ -182,6 +183,7 @@ const Incubator = () => {
   const [trays, setTrays] = useState([]);
   const [selectedTray, setSelectedTray] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useLanguage();
   
   useEffect(() => {
     // Fetch active trays using service
@@ -274,14 +276,14 @@ const Incubator = () => {
   // Render closed incubator view
   const renderClosedView = () => (
     <IncubatorFrame>
-      <FrameLabel>Couveuse</FrameLabel>
+      <FrameLabel>{t.couveuse}</FrameLabel>
       {/* Signature removed */}
       <DoorsContainer>
         <Door onClick={() => handleDoorClick('left')}>
-          Porte Gauche
+          {t.leftDoor}
         </Door>
         <Door onClick={() => handleDoorClick('right')}>
-          Porte Droite
+          {t.rightDoor}
         </Door>
       </DoorsContainer>
     </IncubatorFrame>
@@ -290,19 +292,19 @@ const Incubator = () => {
   // Render open door view
   const renderOpenDoorView = (door) => {
     const doorValue = door === 'leftDoor' ? 'left' : 'right';
-    const doorLabel = doorValue === 'left' ? 'Porte Gauche' : 'Porte Droite';
+    const doorLabel = doorValue === 'left' ? t.leftDoor : t.rightDoor;
     
     return (
       <OpenDoorContainer>
         <DoorHeader isOpen={true}>
-          <BackButton onClick={handleBackClick}>←</BackButton>
+          <BackButton onClick={handleBackClick}>{t.back}</BackButton>
           <span>{doorLabel}</span>
           {/* Signature removed */}
         </DoorHeader>
         
         {[1, 2, 3].map(row => (
           <Row key={row}>
-            <RowLabel>Plateau {row}</RowLabel>
+            <RowLabel>{t.tray} {row}</RowLabel>
             <Tray 
               active={isTrayActive(doorValue, row, doorValue === 'left' ? 'right' : 'left')}
               onClick={() => handleTrayClick(door, row)}
