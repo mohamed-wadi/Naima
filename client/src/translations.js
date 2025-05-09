@@ -53,6 +53,29 @@ export const translations = {
     cancel: "Annuler",
     remove: "Retirer le plateau",
     
+    // TrayModal
+    addNewTray: "Ajouter un nouveau plateau",
+    trayDetails: "Détails du plateau",
+    doorLabel: "Porte:",
+    trayLabel: "Plateau:",
+    selectEggType: "Sélectionnez le type d'œuf:",
+    chickenLabel: "Poulet",
+    duckLabel: "Canard",
+    chickenDays: "(18 jours)",
+    duckDays: "(25 jours)",
+    useCurrentDate: "Utiliser la date actuelle",
+    chooseFromCalendar: "Choisir depuis le calendrier",
+    addedDate: "Date d'ajout:",
+    daysInIncubator: "Jours dans la couveuse:",
+    removalDate: "Date de retrait prévue:",
+    incubationDays: "jours d'incubation",
+    removeTray: "Retirer le plateau",
+    close: "Fermer",
+    confirm: "Confirmer",
+    back: "Retour",
+    selectDate: "Sélectionner une date:",
+    confirmRemoval: "Êtes-vous sûr de vouloir retirer ce plateau?",
+    
     // History page
     allTrays: "Tous les plateaux",
     active: "Actifs",
@@ -95,8 +118,8 @@ export const translations = {
     // Home page
     incubationTracking: "متابعة التفريخ",
     couveuse: "الحاضنة",
-    leftDoor: "الباب الأيسر", // Keep as left door 
-    rightDoor: "الباب الأيمن", // Keep as right door
+    leftDoor: "الباب الأيسر", // Left door (matches French position)
+    rightDoor: "الباب الأيمن", // Right door (matches French position)
     tray: "الصينية",
     back: "←",
     
@@ -123,6 +146,29 @@ export const translations = {
     save: "حفظ",
     cancel: "إلغاء",
     remove: "إزالة الصينية",
+    
+    // TrayModal
+    addNewTray: "إضافة صينية جديدة",
+    trayDetails: "تفاصيل الصينية",
+    doorLabel: "الباب:",
+    trayLabel: "الصينية:",
+    selectEggType: "اختر نوع البيض:",
+    chickenLabel: "دجاج",
+    duckLabel: "بط",
+    chickenDays: "(18 يوم)",
+    duckDays: "(25 يوم)",
+    useCurrentDate: "استخدم التاريخ الحالي",
+    chooseFromCalendar: "اختر من التقويم",
+    addedDate: "تاريخ الإضافة:",
+    daysInIncubator: "الأيام في الحاضنة:",
+    removalDate: "تاريخ الإخراج المتوقع:",
+    incubationDays: "أيام التفريخ",
+    removeTray: "إزالة الصينية",
+    close: "إغلاق",
+    confirm: "تأكيد",
+    back: "رجوع",
+    selectDate: "اختر تاريخًا:",
+    confirmRemoval: "هل أنت متأكد من رغبتك في إزالة هذه الصينية؟",
     
     // History page
     allTrays: "جميع الصواني",

@@ -240,12 +240,8 @@ const History = () => {
     // Utiliser les mois traduits en fonction de la langue actuelle
     const monthName = translations.months[language][month];
     
-    // Format différent selon la langue
-    if (language === 'ar') {
-      return `${day} ${monthName} ${year}`;
-    } else {
-      return `${day} ${monthName} ${year}`;
-    }
+    // Formatter selon la langue - using western digits for both languages
+    return `${day} ${monthName} ${year}`;
   };
   
   // Formatte le jour de la semaine et la date ensemble sur une ligne avec l'heure et les minutes

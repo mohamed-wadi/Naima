@@ -5,6 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaTimes, FaCalendarAlt, FaCheck, FaTrash, FaClock } from 'react-icons/fa';
 import { GiChicken, GiDuck } from 'react-icons/gi';
 import { addTray, removeTray } from '../services/traysService';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../translations';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -237,15 +239,38 @@ const TrayModal = ({ tray, onClose }) => {
   const [error, setError] = useState('');
   const [status, setStatus] = useState(''); // '', 'success', 'error'
   
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   const { door, row, position, existingTray } = tray;
   
   // Format date for display
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
+    const options = {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    });
+    };
+    
+    // Format date according to language
+    let formattedDate;
+    if (language === 'ar') {
+      // For Arabic, we want to use the month name in Arabic but western digits
+      const dateObj = new Date(date);
+      const day = dateObj.getDate();
+      const year = dateObj.getFullYear();
+      const monthIndex = dateObj.getMonth();
+      
+      // Get month name from translations
+      const monthName = t.months ? t.months[monthIndex] : translations.ar.months[monthIndex];
+      
+      // Format: day month year - using western digits
+      formattedDate = `${day} ${monthName} ${year}`;
+    } else {
+      formattedDate = new Date(date).toLocaleDateString('fr-FR', options);
+    }
+    
+    return formattedDate;
   };
   
   // Calculate days in incubator
@@ -267,7 +292,11 @@ const TrayModal = ({ tray, onClose }) => {
 
   // Get incubation duration text based on egg type
   const getIncubationDurationText = (eggType) => {
-    return eggType === 'duck' ? '25 jours' : '18 jours';
+    if (eggType === 'duck') {
+      return `25 ${t.incubationDays}`;
+    } else {
+      return `18 ${t.incubationDays}`;
+    }
   };
 
   // Handle adding a new tray with current date
@@ -372,28 +401,28 @@ const TrayModal = ({ tray, onClose }) => {
       return (
         <>
           <TrayInfo>
-            <TrayInfoItem><strong>Porte:</strong> {door === 'left' ? 'Gauche' : 'Droite'}</TrayInfoItem>
-            <TrayInfoItem><strong>Plateau:</strong> {row}</TrayInfoItem>
-            <TrayInfoItem><strong>Type:</strong> {existingTray.eggType === 'duck' ? (
-              <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> Canard</span>
+            <TrayInfoItem><strong>{t.doorLabel}</strong> {door === 'left' ? t.leftDoor.replace('Porte ', '') : t.rightDoor.replace('Porte ', '')}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.trayLabel}</strong> {row}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.type}:</strong> {existingTray.eggType === 'duck' ? (
+              <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> {t.duckLabel}</span>
             ) : (
-              <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> Poulet</span>
+              <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> {t.chickenLabel}</span>
             )}</TrayInfoItem>
-            <TrayInfoItem><strong>Date d'ajout:</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
-            <TrayInfoItem><strong>Jours dans la couveuse:</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
-            <TrayInfoItem><strong>Date de retrait prévue:</strong> {formatDate(calculateRemovalDate(existingTray.addedDate, existingTray.eggType))} <small>({getIncubationDurationText(existingTray.eggType)} d'incubation)</small></TrayInfoItem>
+            <TrayInfoItem><strong>{t.addedDate}</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.daysInIncubator}</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.removalDate}</strong> {formatDate(calculateRemovalDate(existingTray.addedDate, existingTray.eggType))} <small>({getIncubationDurationText(existingTray.eggType)})</small></TrayInfoItem>
           </TrayInfo>
           
           <OptionButton onClick={() => setStep('confirm-remove')}>
             <IconWrapper color="#dc3545">
               <FaTrash />
             </IconWrapper>
-            Retirer le plateau
+            {t.removeTray}
           </OptionButton>
           
           <ButtonGroup>
             <CancelButton onClick={() => onClose()}>
-              Fermer
+              {t.close}
             </CancelButton>
           </ButtonGroup>
         </>
@@ -403,13 +432,13 @@ const TrayModal = ({ tray, onClose }) => {
       return (
         <>
           <TrayInfo>
-            <TrayInfoItem><strong>Porte:</strong> {door === 'left' ? 'Gauche' : 'Droite'}</TrayInfoItem>
-            <TrayInfoItem><strong>Plateau:</strong> {row}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.doorLabel}</strong> {door === 'left' ? t.leftDoor.replace('Porte ', '') : t.rightDoor.replace('Porte ', '')}</TrayInfoItem>
+            <TrayInfoItem><strong>{t.trayLabel}</strong> {row}</TrayInfoItem>
           </TrayInfo>
           
           {/* Directement à la sélection du type d'œuf */}
           <div>
-            <Label>Sélectionnez le type d'œuf:</Label>
+            <Label>{t.selectEggType}</Label>
             <TypeSelector>
               <TypeButton 
                 selected={selectedType === 'chicken'} 
@@ -419,7 +448,7 @@ const TrayModal = ({ tray, onClose }) => {
                   <GiChicken style={{ fontSize: '5rem', color: '#ff9900' }} />
                 </TypeIcon>
                 <TypeText selected={selectedType === 'chicken'} eggType='chicken'>
-                  Poulet <small>(18 jours)</small>
+                  {t.chickenLabel} <small>{t.chickenDays}</small>
                 </TypeText>
               </TypeButton>
               
@@ -431,7 +460,7 @@ const TrayModal = ({ tray, onClose }) => {
                   <GiDuck style={{ fontSize: '5rem', color: '#0099cc' }} />
                 </TypeIcon>
                 <TypeText selected={selectedType === 'duck'} eggType='duck'>
-                  Canard <small>(25 jours)</small>
+                  {t.duckLabel} <small>{t.duckDays}</small>
                 </TypeText>
               </TypeButton>
             </TypeSelector>
@@ -442,20 +471,20 @@ const TrayModal = ({ tray, onClose }) => {
               <IconWrapper color="#28a745">
                 <FaClock />
               </IconWrapper>
-              Utiliser la date actuelle
+              {t.useCurrentDate}
             </OptionButton>
             
             <OptionButton onClick={() => setStep('calendar')}>
               <IconWrapper color="#007bff">
                 <FaCalendarAlt />
               </IconWrapper>
-              Choisir depuis le calendrier
+              {t.chooseFromCalendar}
             </OptionButton>
           </OptionContainer>
           
           <ButtonGroup>
             <CancelButton onClick={() => onClose()}>
-              Annuler
+              {t.cancel}
             </CancelButton>
           </ButtonGroup>
         </>
@@ -472,7 +501,7 @@ const TrayModal = ({ tray, onClose }) => {
       </TrayInfo>
       
       <DatePickerContainer>
-        <Label>Sélectionner une date:</Label>
+        <Label>{t.selectDate}</Label>
         <DatePickerWrapper>
           <StyledDatePicker
             selected={selectedDate}
@@ -494,10 +523,10 @@ const TrayModal = ({ tray, onClose }) => {
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          Retour
+          {t.back}
         </CancelButton>
         <AddButton onClick={handleAddTrayWithSelectedDate} disabled={loading}>
-          <FaCheck /> Confirmer
+          <FaCheck /> {t.confirm}
         </AddButton>
       </ButtonGroup>
     </>
@@ -507,29 +536,29 @@ const TrayModal = ({ tray, onClose }) => {
   const renderConfirmRemoveView = () => (
     <>
       <TrayInfo>
-        <TrayInfoItem><strong>Porte:</strong> {door === 'left' ? 'Gauche' : 'Droite'}</TrayInfoItem>
-        <TrayInfoItem><strong>Plateau:</strong> {row}</TrayInfoItem>
-        <TrayInfoItem><strong>Type:</strong> {existingTray.eggType === 'duck' ? (
-          <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> Canard <small>(25 jours)</small></span>
+        <TrayInfoItem><strong>{t.doorLabel}</strong> {door === 'left' ? t.leftDoor.replace('Porte ', '') : t.rightDoor.replace('Porte ', '')}</TrayInfoItem>
+        <TrayInfoItem><strong>{t.trayLabel}</strong> {row}</TrayInfoItem>
+        <TrayInfoItem><strong>{t.type}:</strong> {existingTray.eggType === 'duck' ? (
+          <span><GiDuck style={{ verticalAlign: 'middle', marginRight: '5px', color: '#0099cc' }} /> {t.duckLabel} <small>{t.duckDays}</small></span>
         ) : (
-          <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> Poulet <small>(18 jours)</small></span>
+          <span><GiChicken style={{ verticalAlign: 'middle', marginRight: '5px', color: '#ff9900' }} /> {t.chickenLabel} <small>{t.chickenDays}</small></span>
         )}</TrayInfoItem>
-        <TrayInfoItem><strong>Date d'ajout:</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
-        <TrayInfoItem><strong>Jours dans la couveuse:</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
+        <TrayInfoItem><strong>{t.addedDate}</strong> {formatDate(existingTray.addedDate)}</TrayInfoItem>
+        <TrayInfoItem><strong>{t.daysInIncubator}</strong> {calculateDaysInIncubator(existingTray.addedDate)}</TrayInfoItem>
       </TrayInfo>
       
       <ConfirmationContainer>
         <ConfirmationText>
-          Êtes-vous sûr de vouloir retirer ce plateau?
+          {t.confirmRemoval}
         </ConfirmationText>
       </ConfirmationContainer>
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          Annuler
+          {t.cancel}
         </CancelButton>
         <RemoveButton onClick={handleRemoveTray} disabled={loading}>
-          <FaCheck /> Confirmer
+          <FaCheck /> {t.confirm}
         </RemoveButton>
       </ButtonGroup>
     </>
@@ -581,10 +610,10 @@ const TrayModal = ({ tray, onClose }) => {
       
       <ButtonGroup>
         <CancelButton onClick={() => setStep('initial')}>
-          Retour
+          {t.back}
         </CancelButton>
         <AddButton onClick={handleAddTrayWithCurrentDate} disabled={loading}>
-          <FaCheck /> Confirmer
+          <FaCheck /> {t.confirm}
         </AddButton>
       </ButtonGroup>
     </>
@@ -595,7 +624,7 @@ const TrayModal = ({ tray, onClose }) => {
       <ModalContent>
         <ModalHeader>
           <ModalTitle>
-            {existingTray ? 'Détails du plateau' : 'Ajouter un nouveau plateau'}
+            {existingTray ? t.trayDetails : t.addNewTray}
           </ModalTitle>
           <CloseButton onClick={() => onClose()}>
             <FaTimes />
