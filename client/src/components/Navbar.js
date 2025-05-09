@@ -24,7 +24,9 @@ const Logo = styled.div`
   color: #28a745;
   
   @media (max-width: 480px) {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    flex: 1;
+    text-align: left;
   }
 `;
 
@@ -78,15 +80,6 @@ const PrayerDisplay = styled.div`
 
 const TimeDisplay = styled.div`
   display: none;
-  
-  @media (max-width: 480px) {
-    display: block;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #28a745;
-    flex: 1;
-  }
 `;
 
 const MenuToggle = styled.button`
@@ -161,10 +154,6 @@ const Navbar = () => {
   return (
     <NavContainer>
       <Logo>{formatDate(dateTime)} | {formatTime(dateTime)}</Logo>
-      
-      <TimeDisplay>
-        {formatTime(dateTime)}
-      </TimeDisplay>
       
       <PrayerDisplay>
         {prayers[currentPrayerIndex]}
