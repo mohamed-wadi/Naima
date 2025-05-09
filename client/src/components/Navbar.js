@@ -96,9 +96,6 @@ const MenuToggle = styled.button`
   }
 `;
 
-
-
-
 const Navbar = () => {
   const [dateTime, setDateTime] = useState(new Date());
   const [currentPrayerIndex, setCurrentPrayerIndex] = useState(0);
@@ -149,19 +146,9 @@ const Navbar = () => {
     const options = { hour: '2-digit', minute: '2-digit' };
     return date.toLocaleTimeString('fr-FR', options);
   };
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    if (isLangMenuOpen) setIsLangMenuOpen(false);
-  };
-  
-  const toggleLangMenu = () => {
-    setIsLangMenuOpen(!isLangMenuOpen);
-    if (isMenuOpen) setIsMenuOpen(false);
-  };
-  
-  const handleLanguageChange = (lang) => {
-    changeLanguage(lang);
-    setIsLangMenuOpen(false);
   };
 
   return (
@@ -172,7 +159,7 @@ const Navbar = () => {
         {prayers[currentPrayerIndex]}
       </PrayerDisplay>
       
-      <MenuToggle onClick={() => setIsMenuOpen(!isMenuOpen)}>
+      <MenuToggle onClick={toggleMenu}>
         {isMenuOpen ? <FaTimes /> : <FaBars />}
       </MenuToggle>
       
