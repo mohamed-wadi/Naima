@@ -275,7 +275,7 @@ const Incubator = () => {
   const renderClosedView = () => (
     <IncubatorFrame>
       <FrameLabel>Couveuse</FrameLabel>
-      <SignatureLabel>@Naima</SignatureLabel>
+      {/* Signature removed */}
       <DoorsContainer>
         <Door onClick={() => handleDoorClick('left')}>
           Porte Gauche
@@ -297,7 +297,7 @@ const Incubator = () => {
         <DoorHeader isOpen={true}>
           <BackButton onClick={handleBackClick}>←</BackButton>
           <span>{doorLabel}</span>
-          <SignatureLabel>@Naima</SignatureLabel>
+          {/* Signature removed */}
         </DoorHeader>
         
         {[1, 2, 3].map(row => (
